@@ -5,7 +5,7 @@ import './Header.css';
 const Header = ({ toDo, done }) => {
   return (
     <div className="header d-flex">
-      <h1>Todo List</h1>
+      <h1>List of tasks</h1>
       <h2>
         {toDo} more to do, {done} done
       </h2>
