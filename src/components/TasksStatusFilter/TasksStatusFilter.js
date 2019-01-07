@@ -7,10 +7,10 @@ const TasksStatusFilter = () => {
         All
       </button>
       <button type="button" className="btn btn-outline-secondary">
-        >Todo
+        Todo
       </button>
       <button type="button" className="btn btn-outline-secondary">
-        >Done
+        Done
       </button>
     </div>
   );
