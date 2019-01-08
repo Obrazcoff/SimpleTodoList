@@ -14,9 +14,10 @@ export default class App extends Component {
   state = {
     todoData: [
       this.createTask('Learn React'),
-      this.createTask('Build onw apps'),
+      this.createTask('Build own apps'),
       this.createTask('Deploy app to web'),
     ],
+    searchString: '',
   };
 
   createTask(taskName) {
@@ -71,8 +72,22 @@ export default class App extends Component {
     });
   };
 
+  search(tasksList, searchString) {
+    if (searchString.length === 0) {
+      return tasksList;
+    }
+    return tasksList.filter(task => {
+      return task.text.toLowerCase().indexOf(searchString.toLowerCase()) > -1;
+    });
+  }
+
+  onChangeSearchString = searchString => {
+    this.setState({ searchString });
+  };
+
   render() {
-    const { todoData } = this.state;
+    const { todoData, searchString } = this.state;
+    const visibleTasks = this.search(todoData, searchString);
     const doneTasksCount = todoData.filter(item => item.done).length;
     const todoTasksCount = todoData.length - doneTasksCount;
 
@@ -81,12 +96,12 @@ export default class App extends Component {
         <Header toDo={todoTasksCount} done={doneTasksCount} />
 
         <div className="top-panel d-flex">
-          <SearchPanel />
+          <SearchPanel onChangeSearchString={this.onChangeSearchString} />
           <TasksStatusFilter />
         </div>
 
         <TodoList
-          data={todoData}
+          data={visibleTasks}
           onDeleted={this.deleteTask}
           onChangePriority={this.onChangePriority}
           onChangeStatus={this.onChangeStatus}
