@@ -18,6 +18,7 @@ export default class App extends Component {
       this.createTask('Deploy app to web'),
     ],
     searchString: '',
+    filter: 'all',
   };
 
   createTask(taskName) {
@@ -85,9 +86,32 @@ export default class App extends Component {
     this.setState({ searchString });
   };
 
+  filter(tasksList, filter) {
+    switch (filter) {
+      case 'all':
+        return tasksList;
+
+      case 'todo':
+        return tasksList.filter(task => !task.done);
+
+      case 'done':
+        return tasksList.filter(task => task.done);
+
+      default:
+        return tasksList;
+    }
+  }
+
+  onChangeFilter = filter => {
+    this.setState({ filter });
+  };
+
   render() {
-    const { todoData, searchString } = this.state;
-    const visibleTasks = this.search(todoData, searchString);
+    const { todoData, searchString, filter } = this.state;
+    const visibleTasks = this.filter(
+      this.search(todoData, searchString),
+      filter,
+    );
     const doneTasksCount = todoData.filter(item => item.done).length;
     const todoTasksCount = todoData.length - doneTasksCount;
 
@@ -97,7 +121,10 @@ export default class App extends Component {
 
         <div className="top-panel d-flex">
           <SearchPanel onChangeSearchString={this.onChangeSearchString} />
-          <TasksStatusFilter />
+          <TasksStatusFilter
+            filter={filter}
+            onChangeFilter={this.onChangeFilter}
+          />
         </div>
 
         <TodoList

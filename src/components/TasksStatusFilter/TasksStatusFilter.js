@@ -1,20 +1,31 @@
 import React, { Component } from 'react';
 
 export default class TasksStatusFilter extends Component {
-  state = {};
+  buttons = [
+    { filterValue: 'all', btnLabel: 'All' },
+    { filterValue: 'todo', btnLabel: 'Todo' },
+    { filterValue: 'done', btnLabel: 'Done' },
+  ];
+
   render() {
-    return (
-      <div className="btn-group">
-        <button type="button" className="btn btn-info">
-          All
+    const { filter, onChangeFilter } = this.props;
+
+    const buttons = this.buttons.map(({ filterValue, btnLabel }) => {
+      const isActiveFilter = filter === filterValue;
+      const filterClass = isActiveFilter ? 'btn-info' : 'btn-outline-secondary';
+
+      return (
+        <button
+          type="button"
+          className={`btn ${filterClass}`}
+          key={filterValue}
+          onClick={() => onChangeFilter(filterValue)}
+        >
+          {btnLabel}
         </button>
-        <button type="button" className="btn btn-outline-secondary">
-          Todo
-        </button>
-        <button type="button" className="btn btn-outline-secondary">
-          Done
-        </button>
-      </div>
-    );
+      );
+    });
+
+    return <div className="btn-group">{buttons}</div>;
   }
 }
