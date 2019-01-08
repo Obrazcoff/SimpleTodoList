@@ -16,6 +16,9 @@ export default class TaskAddForm extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.props.onTaskAdded(this.state.text);
+    this.setState({
+      text: '',
+    });
   };
 
   render() {
@@ -26,6 +29,7 @@ export default class TaskAddForm extends Component {
           className="form-control"
           onChange={this.onTextChange}
           placeholder="What to do next?"
+          value={this.state.text}
         />
         <button className="btn btn-outline-secondary">Add task</button>
       </form>
