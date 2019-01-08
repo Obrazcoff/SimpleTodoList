@@ -2,26 +2,15 @@ import React, { Component } from 'react';
 import './TodoListItem.css';
 
 export default class TodoListItem extends Component {
-  state = {
-    done: false,
-    priority: false,
-  };
-
-  onTextClick = () => {
-    this.setState(({ done }) => {
-      return { done: !done };
-    });
-  };
-
-  onMarkPriority = () => {
-    this.setState(({ priority }) => {
-      return { priority: !priority };
-    });
-  };
-
   render() {
-    const { text, onDeleted } = this.props;
-    const { done, priority } = this.state;
+    const {
+      text,
+      onDeleted,
+      onChangePriority,
+      onChangeStatus,
+      done,
+      priority,
+    } = this.props;
 
     let classNames = 'todo-list-item';
 
@@ -31,13 +20,13 @@ export default class TodoListItem extends Component {
 
     return (
       <span className={classNames}>
-        <span className="todo-list-item-text" onClick={this.onTextClick}>
+        <span className="todo-list-item-text" onClick={onChangeStatus}>
           {text}
         </span>
         <button
           type="button"
           className="btn btn-outline-success btn-sm float-right"
-          onClick={this.onMarkPriority}
+          onClick={onChangePriority}
         >
           <i className="fa fa-exclamation" />
         </button>

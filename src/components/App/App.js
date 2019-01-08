@@ -13,11 +13,20 @@ export default class App extends Component {
 
   state = {
     todoData: [
-      { text: 'Learn React', priority: false, id: 1 },
-      { text: 'Build onw apps', priority: true, id: 2 },
-      { text: 'Deploy app to web', priority: false, id: 3 },
+      this.createTask('Learn React'),
+      this.createTask('Build onw apps'),
+      this.createTask('Deploy app to web'),
     ],
   };
+
+  createTask(taskName) {
+    return {
+      text: taskName,
+      priority: false,
+      done: false,
+      id: this.lastId++,
+    };
+  }
 
   deleteTask = id => {
     this.setState(({ todoData }) => {
@@ -32,11 +41,7 @@ export default class App extends Component {
   };
 
   addTask = taskName => {
-    const newTask = {
-      text: taskName,
-      priority: false,
-      id: this.lastId++,
-    };
+    const newTask = this.createTask(taskName);
 
     this.setState(({ todoData }) => {
       const newList = [...todoData, newTask];
@@ -47,17 +52,45 @@ export default class App extends Component {
     });
   };
 
+  changeProperty(taskList, id, propName) {
+    const idx = taskList.findIndex(el => el.id === id);
+    const oldTask = taskList[idx];
+    const newTask = { ...oldTask, [propName]: !oldTask[propName] };
+    return [...taskList.slice(0, idx), newTask, ...taskList.slice(idx + 1)];
+  }
+
+  onChangePriority = id => {
+    this.setState(({ todoData }) => {
+      return { todoData: this.changeProperty(todoData, id, 'priority') };
+    });
+  };
+
+  onChangeStatus = id => {
+    this.setState(({ todoData }) => {
+      return { todoData: this.changeProperty(todoData, id, 'done') };
+    });
+  };
+
   render() {
+    const { todoData } = this.state;
+    const doneTasksCount = todoData.filter(item => item.done).length;
+    const todoTasksCount = todoData.length - doneTasksCount;
+
     return (
       <div className="todo-app">
-        <Header toDo={2} done={3} />
+        <Header toDo={todoTasksCount} done={doneTasksCount} />
 
         <div className="top-panel d-flex">
           <SearchPanel />
           <TasksStatusFilter />
         </div>
 
-        <TodoList data={this.state.todoData} onDeleted={this.deleteTask} />
+        <TodoList
+          data={todoData}
+          onDeleted={this.deleteTask}
+          onChangePriority={this.onChangePriority}
+          onChangeStatus={this.onChangeStatus}
+        />
 
         <TaskAddForm onTaskAdded={this.addTask} />
       </div>
