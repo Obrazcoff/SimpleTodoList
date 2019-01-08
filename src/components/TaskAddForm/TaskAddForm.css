@@ -1,3 +1,7 @@
 .task-add-form {
   margin-top: 10px;
 }
+
+.task-add-form input {
+  margin-right: 3px;
+}
